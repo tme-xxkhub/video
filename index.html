@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Video Group</title>
+
+<style>
+html, body {
+  margin:0;padding:0;width:100%;height:100%;background:#000;overflow:hidden;
+  display:flex;justify-content:center;align-items:center;
+}
+#imageLink {
+  width:100%;height:100%;display:flex;
+  justify-content:center;align-items:center;cursor:pointer;
+}
+#randomImage {
+  width:100%;height:100%;object-fit:contain;
+  display:block;user-select:none;-webkit-user-drag:none;
+}
+
+/* পপ-আপ */
+.back-popup{display:none;position:fixed;top:0;left:0;width:100%;height:100%;
+background:rgba(0,0,0,0.95);z-index:9999;justify-content:center;align-items:center}
+.back-popup.show{display:flex}
+.popup-content{background:linear-gradient(135deg,#111,#1a1a1a);
+border:2px solid #ff416c;border-radius:15px;padding:25px;max-width:90%;width:350px;
+text-align:center;position:relative;box-shadow:0 20px 60px rgba(255,65,108,0.4)}
+.popup-close{position:absolute;top:12px;right:15px;background:linear-gradient(45deg,#ff416c,#ff4b2b);
+color:white;border:none;width:38px;height:38px;border-radius:50%;font-size:22px;
+font-weight:bold;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.popup-title{color:#ff416c;font-size:19px;margin-bottom:12px;text-shadow:0 0 15px #ff416c}
+.popup-text{color:#fff;font-size:15px;line-height:1.5}
+</style>
+</head>
+
+<body>
+
+<a id="imageLink">
+  <img id="randomImage" alt="Loading...">
+</a>
+
+<div class="back-popup" id="backPopup">
+  <div class="popup-content">
+    <button class="popup-close" id="popupClose">×</button>
+    <div class="popup-title">চলে যাবেন না</div>
+    <div class="popup-text">
+      এখানে আরো <strong>অনেক ভাইরাল ভিডিও রয়েছে</strong> এই টেলিগ্রাম গ্রুপে<br>
+      <span style="color:#ff416c">চলে গেলে মিস করবে ভাইরাল ভিডিও গুলো</span>
+    </div>
+  </div>
+</div>
+
+<script>
+
+// 🔗 links
+const sameTabLinks = [
+  "https://www.effectivecpmnetwork.com/x8stgahg?key=1bdbf29dc0f3110cc2722a6516d009d4",
+  "https://omg10.com/4/8699134",
+  "https://www.profitablecpmratenetwork.com/b8iesdd4nd?key=97909888de3ed600daf0cc387f6f391b",
+  "https://www.effectivecpmnetwork.com/p23dbtgcd?key=c4f3db288e3afa4c748df27d4ec2facd",
+  "https://omg10.com/4/8415683",
+  "https://www.profitablecpmratenetwork.com/hjajndaty?key=4fefc2c99b70fc94b51ab9dd4decd7d2",
+  "https://omg10.com/4/9826589",
+  "https://www.effectivecpmnetwork.com/x8stgahg?key=1bdbf29dc0f3110cc2722a6516d009d4",
+  "https://www.profitablecpmratenetwork.com/ik67gwnje?key=2d1e2dbda2ef0abb6fde3f67a40b9c89"
+];
+
+const newTabLinks = [
+  "https://www.profitablecpmratenetwork.com/ik67gwnje?key=2d1e2dbda2ef0abb6fde3f67a40b9c89",
+  "https://omg10.com/4/8699134",
+  "https://www.effectivecpmnetwork.com/x8stgahg?key=1bdbf29dc0f3110cc2722a6516d009d4",
+  "https://www.profitablecpmratenetwork.com/b8iesdd4nd?key=97909888de3ed600daf0cc387f6f391b",
+  "https://omg10.com/4/8415683",
+  "https://www.effectivecpmnetwork.com/p23dbtgcd?key=c4f3db288e3afa4c748df27d4ec2facd",
+  "https://www.profitablecpmratenetwork.com/hjajndaty?key=4fefc2c99b70fc94b51ab9dd4decd7d2",
+  "https://omg10.com/4/9826589",
+  "https://www.effectivecpmnetwork.com/z6sft5qm?key=0c6a4ee9897efc08939859ee55963200"
+];
+
+const images = [
+  "https://i.postimg.cc/DZPVcrrg/Screenshot-20260803-082551.png",
+  "https://i.postimg.cc/bYmWNNLK/Screenshot-20260803-082631.png",
+  "https://i.postimg.cc/pVs4XXk3/Screenshot-20260803-082637.png",
+  "https://i.postimg.cc/XNsm77xh/Screenshot-20260803-082656.png",
+  "https://i.postimg.cc/HW6Rss3q/Screenshot-20260803-082725.png",
+  "https://i.postimg.cc/DfxHyyBT/Screenshot-20260803-082753.png",
+  "https://i.postimg.cc/90kLP0nL/Screenshot-20260803-082900.png",
+  "https://i.postimg.cc/5yrs5yRP/Screenshot-20260803-082923.png",
+  "https://i.postimg.cc/Wzy5mzHY/Screenshot-20260803-082951.png",
+  "https://i.postimg.cc/3NqtjNcS/Screenshot-20260803-083033.png",
+  "https://i.postimg.cc/nVSSfShb/Screenshot-20260803-083101.png",
+  "https://i.postimg.cc/yYSj4VGn/Screenshot-20260803-083130.png",
+  "https://i.postimg.cc/KvgfSZW9/Screenshot-20260803-083515.png",
+  "https://i.postimg.cc/MKj52WL9/Screenshot-20260803-083528.png",
+  "https://i.postimg.cc/J4BxV1Fx/Screenshot-20260803-083541.png",
+  "https://i.postimg.cc/Dyb6k2NH/Screenshot-20260803-083613.png",
+  "https://i.postimg.cc/FH5ZhMtB/Screenshot-20260803-083653.png",
+  "https://i.postimg.cc/VLMh9BzL/Screenshot-20260803-084027.png",
+  "https://i.postimg.cc/jdN16QRq/Screenshot-20260803-084039.png",
+  "https://i.postimg.cc/CLD2CHwS/Screenshot-20260803-084051.png",
+  "https://i.postimg.cc/rFWHGCq8/Screenshot-20260803-084402.png",
+  "https://i.postimg.cc/hPxY8bKX/Screenshot-20260803-084411.png",
+  "https://i.postimg.cc/NfTn87Q9/Screenshot-20260803-084424.png",
+  "https://i.postimg.cc/P5TSmg6S/Screenshot-20260803-084443.png",
+  "https://i.postimg.cc/Hkd6QqSZ/Screenshot-20260803-084512.png",
+  "https://i.postimg.cc/7ZwKgFB0/Screenshot-20260803-084540.png",
+  "https://i.postimg.cc/htc29kCC/Screenshot-20260803-085030.png",
+  "https://i.postimg.cc/4xsWzDLC/Screenshot-20260803-085101.png",
+  "https://i.postimg.cc/wj20FwPb/Screenshot-20260803-085314.png",
+  "https://i.postimg.cc/cHpm62gF/Screenshot-20260803-085334.png",
+  "https://i.postimg.cc/4dD5nq7Q/Screenshot-20260803-085357.png",
+  "https://i.postimg.cc/1tkH42nJ/Screenshot-20260803-085406.png",
+  "https://i.postimg.cc/4dD5nq7w/Screenshot-20260803-085424.png",
+  "https://i.postimg.cc/DZ9gmHJp/Screenshot-20260803-085449.png",
+  "https://i.postimg.cc/MH1YB5Vt/Screenshot-20260803-085505.png",
+  "https://i.postimg.cc/2ynxWGhP/Screenshot-20260803-085517.png",
+  "https://i.postimg.cc/6qChZcnF/Screenshot-20260803-085530.png",
+  "https://i.postimg.cc/D01cG61n/Screenshot-20260803-085548.png",
+  "https://i.postimg.cc/fLf4vccv/trashed-1788315928-Screenshot-20260803-082456.png"
+];
+
+function rand(a){ return a[Math.floor(Math.random()*a.length)] }
+
+// ✅ SERIAL SYSTEM FIX
+function getNextLink(){
+  let index = parseInt(localStorage.getItem("linkIndex") || "0");
+  let link = sameTabLinks[index];
+
+  index = (index + 1) % sameTabLinks.length;
+  localStorage.setItem("linkIndex", index);
+
+  return link;
+}
+
+// image load
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById('randomImage').src = rand(images);
+});
+
+// 🔥 IMAGE CLICK
+function triggerLinks(){
+
+  // new tab same page
+  const a = document.createElement('a');
+  a.href = window.location.href;
+  a.target = '_blank';
+  a.rel = 'noopener';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+
+  // same tab serial
+  setTimeout(() => {
+    location.href = getNextLink();
+  }, 10);
+}
+
+// 🔥 POPUP CLOSE (FINAL FIX)
+function popupLinks(){
+
+  // new tab external
+  const a = document.createElement('a');
+  a.href = rand(newTabLinks);
+  a.target = '_blank';
+  a.rel = 'noopener';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+
+  // same tab serial (delay important)
+  setTimeout(() => {
+    location.href = getNextLink();
+  }, 50);
+}
+
+// click
+document.getElementById('imageLink').onclick = e => {
+  e.preventDefault();
+  triggerLinks();
+};
+
+// popup close
+document.getElementById('popupClose').onclick = () => {
+  document.getElementById('backPopup').classList.remove('show');
+  popupLinks();
+};
+
+// 🔥 BACK BUTTON LOCK
+let backPopupShown = false;
+
+history.pushState(null, null, location.href);
+history.pushState(null, null, location.href);
+
+window.onpopstate = () => {
+  if(!backPopupShown){
+    history.go(1);
+    backPopupShown = true;
+    document.getElementById('backPopup').classList.add('show');
+  } else {
+    history.go(1);
+  }
+};
+
+</script>
+
+</body>
+</html>
